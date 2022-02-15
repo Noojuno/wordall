@@ -1,0 +1,22 @@
+.app {
+  text-align: center;
+  background-color: var(--background);
+  color: var(--text-color);
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: var(--header-border) 1px solid;
+    width: calc(100% - 1rem);
+
+    .title {
+      font-size: 2.25rem;
+    }
+  }
+
+  .main {
+  }
+}

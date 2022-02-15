@@ -1,0 +1,9 @@
+.keyboard {
+  .row {
+    margin-top: 0.25rem;
+  }
+
+  .key:not(:last-child) {
+    margin-right: 0.25rem;
+  }
+}

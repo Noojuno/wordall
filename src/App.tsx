@@ -1,24 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import useLocalStorage from "use-local-storage";
+import { Keyboard } from "./components/Keyboard";
+
+import styles from "./App.module.scss";
 
 function App() {
+  const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const [theme, setTheme] = useLocalStorage("theme", defaultDark ? "dark" : "light");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className={styles.app} data-theme={theme}>
+      <header className={styles.header}>
+        <div className={styles.menu}>Wordall</div>
+        <div className={styles.title}>Wordall</div>
+        <div className={styles.menu}>Wordall</div>
       </header>
+
+      <main className={styles.main}>
+        <Keyboard></Keyboard>
+      </main>
     </div>
   );
 }

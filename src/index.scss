@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+:root {
+  --background: white;
+  --text-color: black;
+  --header-border: black;
+
+  /* Button */
+  --btn-text-color: black;
+  --btn-color: lightgray;
+  --btn-hover-color: rgb(224, 223, 223);
+}
+
+[data-theme="dark"] {
+  --background: black;
+  --text-color: white;
+}
