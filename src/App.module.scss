@@ -49,11 +49,16 @@
         justify-content: center;
 
         flex: 9 1;
+
+        overflow-y: auto;
       }
 
       .keyboard {
         height: 200px;
+        min-height: 200px;
         margin-bottom: 1.25rem;
+        margin-top: 1.25rem;
+        max-width: var(--keyboard-max-width);
       }
     }
   }

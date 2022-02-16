@@ -1,4 +1,5 @@
-import { getGuessStatuses, LetterState } from "../lib/guesses";
+import { StringLiteralLike } from "typescript";
+import { getGuessStates, LetterState } from "../lib/guesses";
 import styles from "./Word.module.scss";
 
 interface WordProps {
@@ -9,28 +10,26 @@ interface WordProps {
 
 export function Word({ word = "", solution, revealed }: WordProps) {
   const guess = word + " ".repeat(solution.length - word.length);
-
-  const statuses = getGuessStatuses(solution, guess);
+  const states = getGuessStates(solution, guess);
 
   return (
     <div className={styles.word}>
-      {guess.split("").map((l, i) => {
-        return <Letter key={i} index={i} letter={l} revealed={revealed} statuses={statuses} />;
+      {guess.split("").map((letter, i) => {
+        return <Letter key={i} letter={letter} state={states[i]} revealed={revealed} />;
       })}
     </div>
   );
 }
 
 interface LetterProps {
-  index: number;
   letter: string;
   revealed?: boolean;
-  statuses: LetterState[];
+  state: LetterState;
 }
 
-function Letter({ index, letter, revealed, statuses }: LetterProps) {
+function Letter({ letter, revealed, state }: LetterProps) {
   return (
-    <div className={styles.letter} data-state={revealed ? statuses[index] : "none"} data-animation="flip-in">
+    <div className={styles.letter} data-state={revealed ? state : "none"}>
       {letter}
     </div>
   );

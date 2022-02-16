@@ -1,5 +1,6 @@
 .keyboard {
   width: 100%;
+  max-width: var(--keyboard-max-width);
 
   .row {
     display: flex;
@@ -51,7 +52,7 @@
       }
 
       &[data-state="present"] {
-        background: var(--letter-close-color);
+        background: var(--letter-present-color);
       }
 
       &[data-state="correct"] {

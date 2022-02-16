@@ -15,12 +15,14 @@ body {
 }
 
 :root {
-  --game-max-width: 500px;
-  --letter-size: 6vh;
+  --game-max-width: 1000px;
+  --keyboard-max-width: 500px;
+  --letter-size: 7vh;
 
   @media only screen and (max-width: 600px) {
     --game-max-width: 375px;
-    --letter-size: 7vh;
+    --keyboard-max-width: 375px;
+    --letter-size: 7.5vh;
   }
 
   --background: white;
@@ -39,7 +41,7 @@ body {
   --letter-text-color: black;
 
   --letter-correct-color: #6aaa64;
-  --letter-close-color: #c9b458;
+  --letter-present-color: #c9b458;
   --letter-incorrect-color: #787c7e;
 }
 
@@ -59,6 +61,6 @@ body {
   --letter-text-color: #ffffff;
 
   --letter-correct-color: #538d4e;
-  --letter-close-color: #b59f3b;
+  --letter-present-color: #b59f3b;
   --letter-incorrect-color: #3a3a3c;
 }

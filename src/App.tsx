@@ -24,7 +24,7 @@ function App() {
     });
   };
 
-  const onKey = (key: string) => {
+  const onKeyDown = (key: string) => {
     console.log(key);
 
     if (key === "←" || key === "backspace") {
@@ -43,9 +43,7 @@ function App() {
     if (key.length > 1 || key.length < 1 || !hasGuesses) return;
 
     setCurrentGuess((existing) => {
-      if (existing.length + 1 > actualWord.length) return existing;
-
-      return existing + key;
+      return (existing + key).slice(0, actualWord.length);
     });
   };
 
@@ -59,7 +57,7 @@ function App() {
   if (hasGuesses) filledGuesses.splice(guesses.length, 0, currentGuess);
 
   return (
-    <div className={styles.app} data-theme={theme} onKeyDown={(e) => onKey(e.key.toLowerCase())}>
+    <div className={styles.app} data-theme={theme} onKeyDown={(e) => onKeyDown(e.key.toLowerCase())} tabIndex={0}>
       <header className={styles.header}>
         <div className={styles.menu}>
           <button
@@ -78,14 +76,16 @@ function App() {
 
       <main className={styles.main}>
         <div className={styles.game}>
-          <h2>{actualWord}</h2>
+          <h2>
+            {actualWord} ({guesses.length}/{NUM_GUESSES})
+          </h2>
 
           <div className={styles.words}>
             {filledGuesses.map((guess, i) => {
               return <Word key={i} solution={actualWord.toLowerCase()} word={guess} revealed={i !== guesses.length && guess !== ""} />;
             })}
           </div>
-          <Keyboard guessedLetters={guessedLetters} className={styles.keyboard} onPressKey={onKey} />
+          <Keyboard guessedLetters={guessedLetters} className={styles.keyboard} onPressKey={onKeyDown} />
         </div>
       </main>
     </div>

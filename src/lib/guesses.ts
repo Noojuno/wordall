@@ -1,6 +1,6 @@
 export type LetterState = "correct" | "present" | "incorrect" | "none";
 
-export const getGuessStatuses = (solution: string, guess: string): LetterState[] => {
+export const getGuessStates = (solution: string, guess: string): LetterState[] => {
   const splitSolution = solution.split("");
   const splitGuess = guess.split("");
 
