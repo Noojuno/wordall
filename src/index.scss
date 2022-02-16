@@ -30,27 +30,35 @@ body {
 
   /* Button */
   --btn-text-color: black;
-  --btn-color: lightgray;
-  --btn-hover-color: rgb(224, 223, 223);
+  --btn-color: #d3d6da;
+  --btn-hover-color: #a1a3a6;
 
   /* Letter */
-  --letter-color: rgb(224, 223, 223);
-  --letter-border: lightgray;
+  --letter-color: white;
+  --letter-border: #d3d6da;
   --letter-text-color: black;
+
+  --letter-correct-color: #6aaa64;
+  --letter-close-color: #c9b458;
+  --letter-incorrect-color: #787c7e;
 }
 
 [data-theme="dark"] {
-  --background: black;
-  --text-color: white;
-  --header-border: white;
+  --background: #121213;
+  --text-color: #ffffff;
+  --header-border: #363639;
 
   /* Button */
-  --btn-text-color: black;
-  --btn-color: darkgray;
-  --btn-hover-color: rgb(224, 223, 223);
+  --btn-text-color: #ffffff;
+  --btn-color: #818384;
+  --btn-hover-color: #a6a8aa;
 
   /* Letter */
-  --letter-color: darkgray;
-  --letter-border: lightgray;
-  --letter-text-color: black;
+  --letter-color: transparent;
+  --letter-border: #3a3a3c;
+  --letter-text-color: #ffffff;
+
+  --letter-correct-color: #538d4e;
+  --letter-close-color: #b59f3b;
+  --letter-incorrect-color: #3a3a3c;
 }
