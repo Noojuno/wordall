@@ -1,26 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap");
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
 :root {
+  --game-max-width: 500px;
+  --letter-size: 6vh;
+
+  @media only screen and (max-width: 600px) {
+    --game-max-width: 375px;
+    --letter-size: 7vh;
+  }
+
   --background: white;
   --text-color: black;
   --header-border: black;
+  --header-height: 60px;
 
   /* Button */
   --btn-text-color: black;
   --btn-color: lightgray;
   --btn-hover-color: rgb(224, 223, 223);
+
+  /* Letter */
+  --letter-color: rgb(224, 223, 223);
+  --letter-border: lightgray;
+  --letter-text-color: black;
 }
 
 [data-theme="dark"] {
   --background: black;
   --text-color: white;
+  --header-border: white;
+
+  /* Button */
+  --btn-text-color: black;
+  --btn-color: darkgray;
+  --btn-hover-color: rgb(224, 223, 223);
+
+  /* Letter */
+  --letter-color: darkgray;
+  --letter-border: lightgray;
+  --letter-text-color: black;
 }

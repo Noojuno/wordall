@@ -1,0 +1,24 @@
+.word {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 0.25rem;
+  margin-top: 0.25rem;
+
+  .letter {
+    display: inline-flex;
+    background-color: var(--letter-color);
+    border: 1px solid var(--letter-border);
+    box-sizing: border-box;
+    color: var(--letter-text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1rem;
+    height: var(--letter-size);
+    width: var(--letter-size);
+    padding: 1px;
+    text-transform: uppercase;
+    vertical-align: middle;
+    align-items: center;
+    justify-content: center;
+  }
+}
