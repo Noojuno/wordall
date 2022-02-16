@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import { Button } from "./Button";
 import styles from "./Keyboard.module.scss";
 
 const KEYS = [
@@ -8,28 +7,40 @@ const KEYS = [
   ["ENTER", "z", "x", "c", "v", "b", "n", "m", "←"],
 ];
 
-export function Keyboard({ className }: { className?: string }) {
-  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(e.key);
-  };
+interface KeyboardProps {
+  guessedLetters: string[];
+  className?: string;
+  onPressKey: (key: string) => void;
+}
 
+export function Keyboard({ guessedLetters, onPressKey, className }: KeyboardProps) {
   return (
-    <div className={classNames(styles.keyboard, className)} onKeyDown={onKeyDown}>
-      <KeyRow keys={KEYS[0]} />
-      <KeyRow className={styles.middle} keys={KEYS[1]} />
-      <KeyRow keys={KEYS[2]} />
+    <div className={classNames(styles.keyboard, className)}>
+      <KeyRow keys={KEYS[0]} guessedLetters={guessedLetters} onPressKey={onPressKey} />
+      <KeyRow keys={KEYS[1]} guessedLetters={guessedLetters} middle onPressKey={onPressKey} />
+      <KeyRow keys={KEYS[2]} guessedLetters={guessedLetters} onPressKey={onPressKey} />
     </div>
   );
 }
 
-function KeyRow({ keys, className }: { keys: string[]; className?: string }) {
+interface KeyRowProps {
+  keys: string[];
+  guessedLetters: string[];
+  className?: string;
+  middle?: boolean;
+  onPressKey: (key: string) => void;
+}
+
+function KeyRow({ keys, guessedLetters, className, middle, onPressKey }: KeyRowProps) {
   return (
-    <div className={classNames(styles.row, className)}>
-      {keys.map((k) => {
+    <div className={classNames(styles.row, className, { [styles.middle]: middle })}>
+      {keys.map((key) => {
+        const state = guessedLetters.includes(key.toLowerCase()) ? "incorrect" : "none";
+
         return (
-          <Button key={k} className={styles.key}>
-            {k}
-          </Button>
+          <button key={key} className={styles.key} data-state={state} onClick={() => onPressKey(key.toLowerCase())}>
+            {key}
+          </button>
         );
       })}
     </div>

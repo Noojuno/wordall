@@ -1,34 +1,37 @@
+import { getGuessStatuses, LetterState } from "../lib/guesses";
 import styles from "./Word.module.scss";
 
-type ReactElement = JSX.Element | JSX.Element[] | string | string[];
+interface WordProps {
+  word?: string;
+  solution: string;
+  revealed?: boolean;
+}
 
-const actualWord = "RENTS";
+export function Word({ word = "", solution, revealed }: WordProps) {
+  const guess = word + " ".repeat(solution.length - word.length);
 
-export function Word({ children }: { children?: string }) {
-  const word = children || "     ";
+  const statuses = getGuessStatuses(solution, guess);
 
   return (
     <div className={styles.word}>
-      {word.split("").map((l, i) => {
-        return (
-          <Letter actualWord={actualWord} index={i} key={i}>
-            {l}
-          </Letter>
-        );
+      {guess.split("").map((l, i) => {
+        return <Letter key={i} index={i} letter={l} revealed={revealed} statuses={statuses} />;
       })}
     </div>
   );
 }
 
-type LetterState = "correct" | "close" | "incorrect" | "none";
+interface LetterProps {
+  index: number;
+  letter: string;
+  revealed?: boolean;
+  statuses: LetterState[];
+}
 
-function Letter({ index, actualWord, children }: { index: number; actualWord: string; children: string }) {
-  const hasLetter = actualWord.includes(children);
-  const state: LetterState = children === " " ? "none" : hasLetter ? (actualWord[index] === children ? "correct" : "close") : "incorrect";
-
+function Letter({ index, letter, revealed, statuses }: LetterProps) {
   return (
-    <div className={styles.letter} data-state={state}>
-      {children}
+    <div className={styles.letter} data-state={revealed ? statuses[index] : "none"} data-animation="flip-in">
+      {letter}
     </div>
   );
 }

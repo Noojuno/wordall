@@ -30,8 +30,36 @@
       user-select: none;
       font-size: 0.8rem;
 
+      outline: none;
+      border: none;
+      color: var(--key-text-color);
+      background: var(--key-color);
+      border-radius: 5px;
+      cursor: pointer;
+
       &:last-of-type {
         margin: 0;
+      }
+
+      &:hover {
+        background: var(--key-hover-color);
+      }
+
+      &:not([data-state="none"]) {
+        color: white;
+        border: none;
+      }
+
+      &[data-state="present"] {
+        background: var(--letter-close-color);
+      }
+
+      &[data-state="correct"] {
+        background: var(--letter-correct-color);
+      }
+
+      &[data-state="incorrect"] {
+        background: var(--letter-incorrect-color);
       }
     }
   }
