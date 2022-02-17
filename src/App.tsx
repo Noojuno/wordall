@@ -2,7 +2,7 @@ import useLocalStorage from "use-local-storage";
 import { useQueryParam } from "use-query-params";
 import { useEffect, useState } from "react";
 
-import { getRandom, isEmpty, isLetter, reverse } from "./lib/util";
+import { getRandom, isLetter, reverse } from "./lib/util";
 import { DEFAULT_SETTINGS, WordSettings } from "./lib/words";
 
 import styles from "./App.module.scss";
@@ -16,6 +16,7 @@ function App() {
   const [theme, setTheme] = useLocalStorage<Theme>("theme", defaultDark ? "dark" : "light");
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [wordList, setWordList] = useState<string[]>([]);
   const [settings, setSettings] = useState<WordSettings>({ ...DEFAULT_SETTINGS });
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -24,21 +25,25 @@ function App() {
 
   useEffect(() => {
     if (settingsQuery) {
-      let settings: WordSettings = { ...DEFAULT_SETTINGS, ...JSON.parse(atob(settingsQuery)) };
+      let settings: WordSettings = { ...DEFAULT_SETTINGS, random: false, ...JSON.parse(atob(settingsQuery)) };
       if (settings.word) settings.length = settings.word.length;
 
       setSettings(settings);
     }
+
+    setLoading(false);
   }, [settingsQuery]);
 
   useEffect(() => {
-    if (!settings) return;
+    if (!settings || loading) return;
 
-    fetch(`/words/en/${settings.length}.json`)
+    const { length, word, random } = settings;
+
+    fetch(`/words/en/${length}.json`)
       .then((res) => res.json())
       .then((res) => {
-        if (res[0].length === settings.length) {
-          if (!settings.word) {
+        if (res[0].length === length && (!word || word.length !== length)) {
+          if (random) {
             setSettings((s) => {
               return { ...s, word: getRandom(res) };
             });
@@ -47,15 +52,12 @@ function App() {
           setWordList(res);
         }
       });
-  }, [settings]);
-
-  const solution = settings.word;
-  const numGuesses = settings.guessCount;
+  }, [settings, loading]);
 
   const addGuess = (guess: string) => {
     const lowerGuess = guess.toLowerCase();
 
-    if (!wordList.includes(lowerGuess)) {
+    if (!wordList.includes(lowerGuess) && lowerGuess !== settings.word) {
       // TODO: show error
       console.log("invalid word", lowerGuess);
       return;
@@ -72,7 +74,7 @@ function App() {
     const lowerKey = key.toLowerCase();
 
     // If already correct don't allow typing
-    if (guesses[guesses.length - 1] === solution?.toLowerCase()) return;
+    if (guesses[guesses.length - 1] === settings.word?.toLowerCase()) return;
 
     if (lowerKey === "←" || lowerKey === "backspace") {
       setCurrentGuess((existing) => {
@@ -114,7 +116,7 @@ function App() {
       </header>
 
       <main className={styles.main}>
-        {solution && <GameBoard settings={settings} currentGuess={currentGuess} solution={solution} guesses={guesses} onKeyDown={onKeyDown} />}
+        {settings.word && <GameBoard settings={settings} currentGuess={currentGuess} solution={settings.word} guesses={guesses} onKeyDown={onKeyDown} />}
       </main>
     </div>
   );
