@@ -1,22 +1,37 @@
 import useLocalStorage from "use-local-storage";
+import { useQueryParam } from "use-query-params";
+import { useEffect, useState } from "react";
+
 import { Keyboard } from "./components/Keyboard";
+import { Word } from "./components/Word";
+
+import { isEmpty, isLetter } from "./lib/util";
+import { DEFAULT_SETTINGS, WordSettings } from "./lib/words";
 
 import styles from "./App.module.scss";
-import { Word } from "./components/Word";
-import { useState } from "react";
+import { getGuessStatesLetters as getLetterStates } from "./lib/guesses";
 
 type Theme = "light" | "dark";
-
-const actualWord = "KNOLL";
-const NUM_GUESSES = 6;
 
 function App() {
   const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [theme, setTheme] = useLocalStorage<Theme>("theme", defaultDark ? "dark" : "light");
+
+  const [wordList, setWordList] = useState<string[]>();
+  const [settings, setSettings] = useState<WordSettings>({ ...DEFAULT_SETTINGS, word: "RANDOM" });
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
+  const [settingsQuery] = useQueryParam<string | undefined>("w");
 
-  const hasGuesses = guesses.length < NUM_GUESSES;
+  useEffect(() => {
+    if (settingsQuery) {
+      setSettings(JSON.parse(atob(settingsQuery)));
+    }
+  }, [settingsQuery]);
+
+  const solution = settings.word;
+  const numGuesses = settings.guesses;
+  const hasGuesses = guesses.length < numGuesses;
 
   const addGuess = (guess: string) => {
     setGuesses((existing) => {
@@ -25,8 +40,6 @@ function App() {
   };
 
   const onKeyDown = (key: string) => {
-    console.log(key);
-
     if (key === "←" || key === "backspace") {
       setCurrentGuess((existing) => {
         return existing.slice(0, existing.length - 1);
@@ -34,26 +47,20 @@ function App() {
       return;
     }
 
-    if (key === "enter" && currentGuess.length >= actualWord.length) {
+    if (key === "enter" && currentGuess.length >= solution.length) {
       addGuess(currentGuess);
       setCurrentGuess("");
       return;
     }
 
-    if (key.length > 1 || key.length < 1 || !hasGuesses) return;
+    if (!hasGuesses || !isLetter(key)) return;
 
     setCurrentGuess((existing) => {
-      return (existing + key).slice(0, actualWord.length);
+      return (existing + key).slice(0, solution.length);
     });
   };
 
-  const guessedLetters = guesses
-    .flatMap((g) => g.split(""))
-    .filter((g, i, s) => {
-      return s.indexOf(g) === i;
-    });
-
-  let filledGuesses = [...guesses, ...Array(Math.max(0, NUM_GUESSES - 1 - guesses.length)).fill("")];
+  const filledGuesses = [...guesses, ...Array(Math.max(0, numGuesses - 1 - guesses.length)).fill("")];
   if (hasGuesses) filledGuesses.splice(guesses.length, 0, currentGuess);
 
   return (
@@ -77,15 +84,17 @@ function App() {
       <main className={styles.main}>
         <div className={styles.game}>
           <h2>
-            {actualWord} ({guesses.length}/{NUM_GUESSES})
+            {solution} ({guesses.length}/{numGuesses})
           </h2>
 
           <div className={styles.words}>
             {filledGuesses.map((guess, i) => {
-              return <Word key={i} solution={actualWord.toLowerCase()} word={guess} revealed={i !== guesses.length && guess !== ""} />;
+              const revealed = i !== guesses.length && isEmpty(guess);
+
+              return <Word key={i} solution={solution.toLowerCase()} word={guess} revealed={revealed} />;
             })}
           </div>
-          <Keyboard guessedLetters={guessedLetters} className={styles.keyboard} onPressKey={onKeyDown} />
+          <Keyboard className={styles.keyboard} letterStates={getLetterStates(solution, guesses)} onPressKey={onKeyDown} />
         </div>
       </main>
     </div>

@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { LetterState, LetterStateDict } from "../lib/guesses";
 import styles from "./Keyboard.module.scss";
 
 const KEYS = [
@@ -8,34 +9,34 @@ const KEYS = [
 ];
 
 interface KeyboardProps {
-  guessedLetters: string[];
+  letterStates: LetterStateDict;
   className?: string;
   onPressKey: (key: string) => void;
 }
 
-export function Keyboard({ guessedLetters, onPressKey, className }: KeyboardProps) {
+export function Keyboard({ letterStates, onPressKey, className }: KeyboardProps) {
   return (
     <div className={classNames(styles.keyboard, className)}>
-      <KeyRow keys={KEYS[0]} guessedLetters={guessedLetters} onPressKey={onPressKey} />
-      <KeyRow keys={KEYS[1]} guessedLetters={guessedLetters} middle onPressKey={onPressKey} />
-      <KeyRow keys={KEYS[2]} guessedLetters={guessedLetters} onPressKey={onPressKey} />
+      <KeyRow keys={KEYS[0]} letterStates={letterStates} onPressKey={onPressKey} />
+      <KeyRow keys={KEYS[1]} letterStates={letterStates} middle onPressKey={onPressKey} />
+      <KeyRow keys={KEYS[2]} letterStates={letterStates} onPressKey={onPressKey} />
     </div>
   );
 }
 
 interface KeyRowProps {
   keys: string[];
-  guessedLetters: string[];
+  letterStates: LetterStateDict;
   className?: string;
   middle?: boolean;
   onPressKey: (key: string) => void;
 }
 
-function KeyRow({ keys, guessedLetters, className, middle, onPressKey }: KeyRowProps) {
+function KeyRow({ keys, letterStates, className, middle, onPressKey }: KeyRowProps) {
   return (
     <div className={classNames(styles.row, className, { [styles.middle]: middle })}>
       {keys.map((key) => {
-        const state = guessedLetters.includes(key.toLowerCase()) ? "incorrect" : "none";
+        const state = letterStates[key.toLowerCase()] || "none";
 
         return (
           <button key={key} className={styles.key} data-state={state} onClick={() => onPressKey(key.toLowerCase())}>

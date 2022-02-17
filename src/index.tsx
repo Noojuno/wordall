@@ -3,10 +3,13 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { QueryParamProvider } from "use-query-params";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <QueryParamProvider>
+      <App />
+    </QueryParamProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

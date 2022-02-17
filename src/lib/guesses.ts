@@ -1,8 +1,8 @@
 export type LetterState = "correct" | "present" | "incorrect" | "none";
 
 export const getGuessStates = (solution: string, guess: string): LetterState[] => {
-  const splitSolution = solution.split("");
-  const splitGuess = guess.split("");
+  const splitSolution = solution.toLowerCase().split("");
+  const splitGuess = guess.toLowerCase().split("");
 
   const solutionCharsTaken = splitSolution.map((_) => false);
 
@@ -40,4 +40,26 @@ export const getGuessStates = (solution: string, guess: string): LetterState[] =
   });
 
   return statuses;
+};
+
+const stateOrder: LetterState[] = ["correct", "present", "incorrect", "none"];
+
+export type LetterStateDict = { [letter: string]: LetterState };
+export const getGuessStatesLetters = (solution: string, guesses: string[]): LetterStateDict => {
+  const states: LetterStateDict = {};
+
+  for (const guess of guesses) {
+    const guessStates = getGuessStates(solution, guess);
+
+    for (let i = 0; i < guessStates.length; i++) {
+      const letter = guess[i].toLowerCase();
+      const state = guessStates[i];
+
+      if (!states[letter] || stateOrder.indexOf(states[letter]) >= stateOrder.indexOf(state)) {
+        states[letter] = state;
+      }
+    }
+  }
+
+  return states;
 };
