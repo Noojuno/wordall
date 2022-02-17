@@ -1,4 +1,3 @@
-import { StringLiteralLike } from "typescript";
 import { getGuessStates, LetterState } from "../lib/guesses";
 import styles from "./Word.module.scss";
 
