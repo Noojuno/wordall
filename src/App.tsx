@@ -39,6 +39,7 @@ function App() {
 
     const { length, word, random } = settings;
 
+    // TODO: word list not being set correctly for 4 letter words
     fetch(`/words/en/${length}.json`)
       .then((res) => res.json())
       .then((res) => {
@@ -61,6 +62,10 @@ function App() {
       // TODO: show error
       console.log("invalid word", lowerGuess);
       return;
+    }
+
+    if (guesses.length >= settings.guessCount) {
+      console.log("word was", settings.word);
     }
 
     setGuesses((existing) => {
