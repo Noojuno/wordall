@@ -16,9 +16,10 @@ type Theme = "light" | "dark";
 function App() {
   const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [theme, setTheme] = useLocalStorage<Theme>("theme", defaultDark ? "dark" : "light");
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   const [wordList, setWordList] = useState<string[]>();
-  const [settings, setSettings] = useState<WordSettings>({ ...DEFAULT_SETTINGS, word: "RANDOM" });
+  const [settings, setSettings] = useState<WordSettings>({ ...DEFAULT_SETTINGS, word: "KNOLL" });
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [settingsQuery] = useQueryParam<string | undefined>("w");
@@ -28,6 +29,14 @@ function App() {
       setSettings(JSON.parse(atob(settingsQuery)));
     }
   }, [settingsQuery]);
+
+  useEffect(() => {
+    if (!settings) return;
+
+    fetch(`/words/en/${settings.word.length}.json`)
+      .then((res) => res.json())
+      .then((res) => setWordList(res));
+  }, [settings]);
 
   const solution = settings.word;
   const numGuesses = settings.guesses;
@@ -67,13 +76,7 @@ function App() {
     <div className={styles.app} data-theme={theme} onKeyDown={(e) => onKeyDown(e.key.toLowerCase())} tabIndex={0}>
       <header className={styles.header}>
         <div className={styles.menu}>
-          <button
-            onClick={() => {
-              setTheme(theme === "dark" ? "light" : "dark");
-            }}
-          >
-            Theme
-          </button>
+          <button onClick={toggleTheme}>Theme</button>
         </div>
         <div className={styles.title}>
           Word<em>all</em>
@@ -84,7 +87,7 @@ function App() {
       <main className={styles.main}>
         <div className={styles.game}>
           <h2>
-            {solution} ({guesses.length}/{numGuesses})
+            ({guesses.length}/{numGuesses})
           </h2>
 
           <div className={styles.words}>
