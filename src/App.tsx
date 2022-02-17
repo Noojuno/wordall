@@ -64,7 +64,7 @@ function App() {
       return;
     }
 
-    if (guesses.length >= settings.guessCount) {
+    if (guesses.length + 1 >= settings.guessCount) {
       console.log("word was", settings.word);
     }
 
