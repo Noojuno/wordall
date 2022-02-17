@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 import { Keyboard } from "./components/Keyboard";
 import { Word } from "./components/Word";
 
-import { isEmpty, isLetter } from "./lib/util";
+import { isEmpty, isLetter, reverse } from "./lib/util";
 import { DEFAULT_SETTINGS, WordSettings } from "./lib/words";
 
 import styles from "./App.module.scss";
 import { getGuessStatesLetters as getLetterStates } from "./lib/guesses";
+import classNames from "classnames";
 
 type Theme = "light" | "dark";
 
@@ -18,7 +19,7 @@ function App() {
   const [theme, setTheme] = useLocalStorage<Theme>("theme", defaultDark ? "dark" : "light");
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
-  const [wordList, setWordList] = useState<string[]>();
+  const [wordList, setWordList] = useState<string[]>([]);
   const [settings, setSettings] = useState<WordSettings>({ ...DEFAULT_SETTINGS, word: "KNOLL" });
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
@@ -26,7 +27,7 @@ function App() {
 
   useEffect(() => {
     if (settingsQuery) {
-      setSettings(JSON.parse(atob(settingsQuery)));
+      setSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(atob(settingsQuery)) });
     }
   }, [settingsQuery]);
 
@@ -35,7 +36,13 @@ function App() {
 
     fetch(`/words/en/${settings.word.length}.json`)
       .then((res) => res.json())
-      .then((res) => setWordList(res));
+      .then((res) => {
+        console.log(res[0].length === settings.word.length);
+
+        if (res[0].length === settings.word.length) {
+          setWordList(res);
+        }
+      });
   }, [settings]);
 
   const solution = settings.word;
@@ -43,29 +50,51 @@ function App() {
   const hasGuesses = guesses.length < numGuesses;
 
   const addGuess = (guess: string) => {
+    const lowerGuess = guess.toLowerCase();
+
+    if (!wordList.includes(lowerGuess)) {
+      // TODO: show error
+      console.log("invalid word", lowerGuess);
+      return;
+    }
+
     setGuesses((existing) => {
-      return [...existing, guess.toLowerCase()];
+      return [...existing, lowerGuess];
     });
+
+    setCurrentGuess("");
   };
 
   const onKeyDown = (key: string) => {
-    if (key === "←" || key === "backspace") {
+    const lowerKey = key.toLowerCase();
+
+    // If already correct don't allow typing
+    if (guesses[guesses.length - 1] === solution.toLowerCase()) return;
+
+    if (lowerKey === "←" || lowerKey === "backspace") {
       setCurrentGuess((existing) => {
-        return existing.slice(0, existing.length - 1);
+        const amount = reverse(existing).search(/\S|$/) + 1;
+
+        return existing.slice(0, existing.length - amount);
       });
       return;
     }
 
-    if (key === "enter" && currentGuess.length >= solution.length) {
+    // Submit guess
+    if (lowerKey === "enter" && currentGuess.length >= solution.length) {
       addGuess(currentGuess);
-      setCurrentGuess("");
       return;
     }
 
-    if (!hasGuesses || !isLetter(key)) return;
+    if (!hasGuesses || !isLetter(lowerKey)) return;
 
     setCurrentGuess((existing) => {
-      return (existing + key).slice(0, solution.length);
+      // Allows for deleting a letter and filling it in as you go
+      if (existing.includes(" ")) {
+        return existing.replace(" ", lowerKey);
+      }
+
+      return (existing + lowerKey).slice(0, solution.length);
     });
   };
 
@@ -75,19 +104,19 @@ function App() {
   return (
     <div className={styles.app} data-theme={theme} onKeyDown={(e) => onKeyDown(e.key.toLowerCase())} tabIndex={0}>
       <header className={styles.header}>
-        <div className={styles.menu}>
+        <div className={classNames(styles.menu, styles.left)}>
           <button onClick={toggleTheme}>Theme</button>
         </div>
         <div className={styles.title}>
-          Word<em>all</em>
+          WORD<em>ALL</em>
         </div>
-        <div className={styles.menu}>Menu</div>
+        <div className={classNames(styles.menu, styles.right)}>Menu</div>
       </header>
 
       <main className={styles.main}>
         <div className={styles.game}>
           <h2>
-            ({guesses.length}/{numGuesses})
+            GUESSES: ({guesses.length}/{numGuesses})
           </h2>
 
           <div className={styles.words}>

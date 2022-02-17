@@ -44,6 +44,10 @@
       border: none;
     }
 
+    &[data-state="none"] {
+      cursor: pointer;
+    }
+
     &[data-state="present"] {
       background: var(--letter-present-color);
     }
