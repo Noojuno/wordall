@@ -45,7 +45,7 @@ export const getGuessStates = (solution: string, guess: string): LetterState[] =
 const stateOrder: LetterState[] = ["correct", "present", "incorrect", "none"];
 
 export type LetterStateDict = { [letter: string]: LetterState };
-export const getGuessStatesLetters = (solution: string, guesses: string[]): LetterStateDict => {
+export const getLetterStates = (solution: string, guesses: string[]): LetterStateDict => {
   const states: LetterStateDict = {};
 
   for (const guess of guesses) {

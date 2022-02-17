@@ -1,10 +1,14 @@
 export interface WordSettings {
-  word: string;
-  guesses: number;
+  word?: string;
+  guessCount: number;
+  length: number;
+  random?: boolean;
 }
 
-const DEFAULT_SETTINGS: Omit<WordSettings, "word"> = {
-  guesses: 6,
+const DEFAULT_SETTINGS: WordSettings = {
+  guessCount: 6,
+  length: 5,
+  random: true,
 };
 
 export { DEFAULT_SETTINGS };
