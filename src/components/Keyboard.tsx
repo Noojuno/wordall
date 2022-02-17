@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { LetterState, LetterStateDict } from "../lib/guesses";
+import { LetterStateDict } from "../lib/guesses";
 import styles from "./Keyboard.module.scss";
 
 const KEYS = [

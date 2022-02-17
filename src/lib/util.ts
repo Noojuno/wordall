@@ -1,5 +1,5 @@
 export function isLetter(c: string): boolean {
-  return c.length == 1 && c.toLowerCase() != c.toUpperCase();
+  return c.length === 1 && c.toLowerCase() !== c.toUpperCase();
 }
 
 export function isEmpty(str: string | null) {
