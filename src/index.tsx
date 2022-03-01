@@ -4,11 +4,14 @@ import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryParamProvider } from "use-query-params";
+import { ToastProvider } from "./lib/toast";
 
 ReactDOM.render(
   <React.StrictMode>
     <QueryParamProvider>
-      <App />
+      <ToastProvider>
+        <App />
+      </ToastProvider>
     </QueryParamProvider>
   </React.StrictMode>,
   document.getElementById("root")

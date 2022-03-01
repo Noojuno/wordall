@@ -12,6 +12,6 @@ export function reverse(str: string) {
   return o;
 }
 
-export function getRandom(array: []) {
+export function getRandom(array: any[]) {
   return array[Math.floor(Math.random() * array.length)];
 }

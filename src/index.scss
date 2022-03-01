@@ -25,20 +25,29 @@ body {
     --letter-size: 7.5vh;
   }
 
-  --background: white;
-  --text-color: black;
-  --header-border: black;
+  --background: #ffffff;
+  --text-color: #000000;
+  --header-border: #000000;
   --header-height: 60px;
 
+  /* Button */
+  --btn-text-color: #000000;
+  --btn-color: #d3d6da;
+  --btn-hover-color: #a1a3a6;
+
+  /* Toast */
+  --toast-color: #d3d6da;
+  --toast-text-color: #000000;
+
   /* Key */
-  --key-text-color: black;
+  --key-text-color: #000000;
   --key-color: #d3d6da;
   --key-hover-color: #a1a3a6;
 
   /* Letter */
-  --letter-color: white;
+  --letter-color: #ffffff;
   --letter-border: #d3d6da;
-  --letter-text-color: black;
+  --letter-text-color: #000000;
 
   --letter-correct-color: #6aaa64;
   --letter-present-color: #c9b458;
@@ -49,6 +58,15 @@ body {
   --background: #121213;
   --text-color: #ffffff;
   --header-border: #363639;
+
+  /* Button */
+  --btn-text-color: #ffffff;
+  --btn-color: #818384;
+  --btn-hover-color: #a6a8aa;
+
+  /* Toast */
+  --toast-color: #3a3a3c;
+  --toast-text-color: #ffffff;
 
   /* Key */
   --key-text-color: #ffffff;

@@ -1,0 +1,39 @@
+.toast {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  pointer-events: none;
+  width: fit-content;
+
+  background: var(--toast-color);
+  color: var(--toast-text-color);
+  padding: 0 1rem;
+  border-radius: 1rem;
+}
+
+.fadein {
+  animation: fadeIn ease 0.5s forwards;
+}
+
+.fadeout {
+  animation: fadeOut ease 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

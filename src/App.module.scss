@@ -41,35 +41,5 @@
     max-width: var(--game-max-width);
     margin: 0 auto;
     height: calc(100% - var(--header-height) - 1px);
-
-    .game {
-      display: flex;
-      flex-direction: column;
-      width: var(--game-max-width);
-      justify-content: center;
-      align-items: center;
-      flex-grow: 1;
-      overflow: hidden;
-
-      .words {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-        // justify-content: center;
-
-        flex: 9 1;
-
-        overflow-y: auto;
-      }
-
-      .keyboard {
-        height: 200px;
-        min-height: 200px;
-        margin-bottom: 1.25rem;
-        margin-top: 1.25rem;
-        max-width: var(--keyboard-max-width);
-      }
-    }
   }
 }

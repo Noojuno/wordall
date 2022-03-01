@@ -5,7 +5,7 @@ import { Keyboard } from "./Keyboard";
 import { Word } from "./Word";
 import { isEmpty } from "../lib/util";
 
-import styles from "../App.module.scss";
+import styles from "./GameBoard.module.scss";
 
 interface GameBoardProps {
   settings: WordSettings;
