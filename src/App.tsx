@@ -1,5 +1,5 @@
 import useLocalStorage from "use-local-storage";
-import { useQueryParam } from "use-query-params";
+import { NumberParam, QueryParamConfigMap, StringParam, useQueryParams, withDefault } from "use-query-params";
 import { useEffect, useState } from "react";
 
 import { getRandom, isLetter, reverse } from "./lib/util";
@@ -11,6 +11,12 @@ import { GameBoard } from "./components/GameBoard";
 
 type Theme = "light" | "dark";
 
+const QUERY_PARAMS_CONFIG: QueryParamConfigMap = {
+  w: withDefault(StringParam, null),
+  g: withDefault(NumberParam, null),
+  l: withDefault(NumberParam, null),
+};
+
 function App() {
   const defaultDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
   const [theme, setTheme] = useLocalStorage<Theme>("theme", defaultDark ? "dark" : "light");
@@ -18,33 +24,36 @@ function App() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [wordList, setWordList] = useState<string[]>([]);
-  const [settings, setSettings] = useState<WordSettings>({ ...DEFAULT_SETTINGS });
+  const [settings, setSettings] = useState<WordSettings>(DEFAULT_SETTINGS);
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
-  const [settingsQuery] = useQueryParam<string | undefined>("w");
+  const [queryParams] = useQueryParams(QUERY_PARAMS_CONFIG);
 
   useEffect(() => {
-    if (settingsQuery) {
-      let settings: WordSettings = { ...DEFAULT_SETTINGS, random: false, ...JSON.parse(atob(settingsQuery)) };
-      if (settings.word) settings.length = settings.word.length;
+    if (queryParams) {
+      console.log(atob(queryParams.w));
 
-      setSettings(settings);
+      const word: string | undefined = queryParams.w ? atob(queryParams.w) : undefined;
+      const length: number = word ? word.length : queryParams.l || DEFAULT_SETTINGS.length;
+      const guessCount: number = queryParams.g || DEFAULT_SETTINGS.guessCount;
+
+      setSettings({ ...DEFAULT_SETTINGS, random: false, word, length, guessCount });
     }
 
     setLoading(false);
-  }, [settingsQuery]);
+  }, [queryParams]);
 
   useEffect(() => {
     if (!settings || loading) return;
 
-    const { length, word, random } = settings;
+    const { length, word } = settings;
 
     // TODO: word list not being set correctly for 4 letter words
     fetch(`/words/en/${length}.json`)
       .then((res) => res.json())
       .then((res) => {
         if (res[0].length === length && (!word || word.length !== length)) {
-          if (random) {
+          if (!word) {
             setSettings((s) => {
               return { ...s, word: getRandom(res) };
             });
