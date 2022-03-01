@@ -23,10 +23,19 @@ export function GameBoard({ guesses, settings, solution, currentGuess, onKeyDown
   const filledGuesses = [...guesses, ...Array(Math.max(0, guessCount - 1 - guesses.length)).fill("")];
   if (hasGuesses) filledGuesses.splice(guesses.length, 0, currentGuess);
 
+  const didWin = guesses[guesses.length - 1] === solution;
+  const isComplete = didWin || guesses.length >= guessCount;
+
   return (
     <div className={styles.game}>
       <h2>
-        GUESSES: ({guesses.length}/{guessCount})
+        {isComplete && (didWin ? <span>Congratulations! </span> : <span>Bad luck! </span>)}
+        {isComplete && <span>The word was {solution.toUpperCase()}.</span>}
+        {!isComplete && (
+          <span>
+            GUESSES: ({guesses.length}/{guessCount})
+          </span>
+        )}
       </h2>
 
       <div className={styles.words}>
