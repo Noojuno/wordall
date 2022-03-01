@@ -1,8 +1,23 @@
-# Getting Started with Create React App
+# Wordall
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Wordall is a clone of Wordle with much more customizability! It is built using React and TypeScript. You can find a hosted version [here](https://wordall.vercel.app/)
 
-## Available Scripts
+## Features
+Wordall a few new features, all currently customizable via query parameters. In the future I would like to build a UI to access them. They are: 
+* Custom words.
+  * You can share a word via the query param `w`
+  * It must be a url and base64 encoded word, for example `https://wordall.vercel.app/?w=Ymx1cmI%3D` is the word `BLURB`
+* Custom word length
+  * The days of 5 letter words are over!
+  * You can control the length of the random word via the query param `l`, for example `https://wordall.vercel.app/?l=6` for 6 letter words.
+  * 3-12 letter words are supported.
+* Total number of guesses.
+  * Can be set with the query param `g`, for example `https://wordall.vercel.app/?g=8`.
+  * This currently works well on desktop, but the mobile UI has a few issues with the UX of scrolling through guesses.
+* Dark and light mode
+  * It supports both dark and light mode, and should be set by default according to your system settings
+
+## Development
 
 In the project directory, you can run:
 
@@ -14,33 +29,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
