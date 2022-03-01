@@ -1,16 +1,17 @@
 import useLocalStorage from "use-local-storage";
 import { NumberParam, QueryParamConfigMap, StringParam, useQueryParams, withDefault } from "use-query-params";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useCallback } from "react";
+import classNames from "classnames";
 
 import { getRandom, isLetter, reverse } from "./lib/util";
 import { DEFAULT_SETTINGS, WordSettings } from "./lib/words";
 
-import styles from "./App.module.scss";
-import classNames from "classnames";
 import { GameBoard } from "./components/GameBoard";
 import { ToastMessage } from "./components/ToastMessage";
 import { ToastContext } from "./lib/toast";
 import { Button } from "./components/Button";
+
+import styles from "./App.module.scss";
 
 type Theme = "light" | "dark";
 
@@ -34,34 +35,21 @@ function App() {
 
   const hasWon = settings && guesses[guesses.length - 1] === settings.word?.toLowerCase();
 
-  const updateWordList = async (length: number, updateWord: boolean) => {
-    const words: string[] = await fetch(`/words/en/${length}.json`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res[0].length === length) {
-          setWordList(res);
-        }
+  const resetWord = useCallback(
+    (words: string[] = wordList) => {
+      setGuesses([]);
+      setCurrentGuess("");
 
-        return res;
+      const word = getRandom(words);
+
+      setSettings((s) => {
+        return s ? { ...s, word } : s;
       });
 
-    if (updateWord) {
-      resetWord(words);
-    }
-  };
-
-  const resetWord = (words: string[] = wordList) => {
-    setGuesses([]);
-    setCurrentGuess("");
-
-    const word = getRandom(words);
-
-    setSettings((s) => {
-      return s ? { ...s, word } : s;
-    });
-
-    setQueryParams({ w: btoa(encodeURIComponent(word)), l: undefined });
-  };
+      setQueryParams({ w: btoa(encodeURIComponent(word)), l: undefined });
+    },
+    [setQueryParams, wordList]
+  );
 
   useEffect(() => {
     if (queryParams) {
@@ -81,8 +69,24 @@ function App() {
 
     const { length, word } = settings;
 
+    const updateWordList = async (length: number, updateWord: boolean) => {
+      const words: string[] = await fetch(`/words/en/${length}.json`)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res[0].length === length) {
+            setWordList(res);
+          }
+
+          return res;
+        });
+
+      if (updateWord) {
+        resetWord(words);
+      }
+    };
+
     if (!wordList || wordList.length <= 0) updateWordList(length, !word || word.length !== length);
-  }, [settings, wordList, updateWordList]);
+  }, [settings, wordList, resetWord]);
 
   const addGuess = (guess: string) => {
     const lowerGuess = guess.toLowerCase();
@@ -92,13 +96,8 @@ function App() {
     toast?.clear();
 
     if (!wordList.includes(lowerGuess) && lowerGuess !== settings.word) {
-      // TODO: show error
       toast?.show(`${lowerGuess.toUpperCase()} is not in our dictionary!`, 2);
       return;
-    }
-
-    if (guesses.length + 1 >= settings.guessCount) {
-      console.log("word was", settings.word);
     }
 
     setGuesses((existing) => {
