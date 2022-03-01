@@ -82,7 +82,7 @@ function App() {
     const { length, word } = settings;
 
     if (!wordList || wordList.length <= 0) updateWordList(length, !word || word.length !== length);
-  }, [settings, wordList]);
+  }, [settings, wordList, updateWordList]);
 
   const addGuess = (guess: string) => {
     const lowerGuess = guess.toLowerCase();

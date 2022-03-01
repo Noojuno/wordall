@@ -12,7 +12,7 @@ export const ToastContext = React.createContext<IToastContextProps | null>(null)
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [visible, setVisible] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [timeoutInstance, setTimeoutInstance] = useState<NodeJS.Timeout | null>(null);
+  const [, setTimeoutInstance] = useState<NodeJS.Timeout | null>(null);
 
   return (
     <ToastContext.Provider
@@ -23,8 +23,8 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
           setMessage(text);
           setVisible(true);
 
-          setTimeoutInstance((e) => {
-            if (e) clearTimeout(e);
+          setTimeoutInstance((existing) => {
+            if (existing) clearTimeout(existing);
 
             return setTimeout(() => {
               setVisible(false);
