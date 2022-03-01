@@ -41,7 +41,10 @@
 
     &:not([data-state="none"]) {
       color: white;
-      border: none;
+      border-color: transparent;
+
+      animation: FlipIn 0.35s linear;
+      transition: background-color 0.5s linear 0s, border-color 0.25s linear 0s, color 0.25s linear 0s;
     }
 
     &[data-state="none"] {
@@ -59,20 +62,19 @@
     &[data-state="incorrect"] {
       background: var(--letter-incorrect-color);
     }
-
-    &[data-animation="flip-in"] {
-      animation-name: FlipIn;
-      animation-duration: 250ms;
-      animation-timing-function: ease-in;
-    }
   }
 }
 
 @keyframes FlipIn {
   0% {
-    transform: rotateX(0);
+    transform: rotateX(0deg);
   }
+
+  50% {
+    transform: rotateX(90deg);
+  }
+
   100% {
-    transform: rotateX(-90deg);
+    transform: rotateX(0deg);
   }
 }
